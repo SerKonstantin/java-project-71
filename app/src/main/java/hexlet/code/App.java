@@ -4,9 +4,10 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+import java.util.concurrent.Callable;
 
 @Command(name = "gendiff", version = "0.0.1", mixinStandardHelpOptions = true)
-public class App implements Runnable {
+public class App implements Callable {
     public static void main(String[] args) {
         App app = new App();
         new CommandLine(app).execute(args);
@@ -21,9 +22,10 @@ public class App implements Runnable {
     @Option(names = {"-f", "--format"}, description = "output format [default: stylish]", paramLabel = "format", defaultValue = "stylish")
     private String format;
 
-    public void run() {
-        var diff = Differ.generate(filepath1, filepath2);
+    @Override
+    public String call() throws Exception {
+        String diff = Differ.generate(filepath1, filepath2);
         System.out.println(diff);
+        return diff;
     }
-
 }
