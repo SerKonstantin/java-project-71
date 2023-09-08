@@ -11,14 +11,19 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class Differ {
-    public static String generate(String filepath1, String filepath2) throws Exception {
+    public static String generate(String filepath1, String filepath2) {
         String json1 = fileToString(filepath1);
         String json2 = fileToString(filepath2);
 
-
+        Map<String, ?> data1;
+        Map<String, ?> data2;
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, ?> data1 = mapper.readValue(json1, new TypeReference<>() { });
-        Map<String, ?> data2 = mapper.readValue(json2, new TypeReference<>() { });
+        try {
+            data1 = mapper.readValue(json1, new TypeReference<>() { });
+            data2 = mapper.readValue(json2, new TypeReference<>() { });
+        } catch (Exception mappingError) {
+            throw new RuntimeException("Failed to read as json", mappingError);
+        }
 
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
         combinedKeys.addAll(data2.keySet());
@@ -61,11 +66,15 @@ public class Differ {
         return sb.toString();
     }
 
-    public static String fileToString(String filepath) throws Exception {
+    public static String fileToString(String filepath) {
         Path path = Paths.get(filepath).toAbsolutePath().normalize();
         if (!Files.exists(path)) {
-            throw new Exception("File '" + path + "' doesn't exist");
+            throw new RuntimeException("File '" + path + "' doesn't exist");
         }
-        return Files.readString(path);
+        try {
+            return Files.readString(path);
+        } catch (Exception readError) {
+            throw new RuntimeException("Failed to read file '" + path + "'", readError);
+        }
     }
 }

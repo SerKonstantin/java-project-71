@@ -3,14 +3,15 @@ package hexlet.code;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DifferTest {
     String[] filepaths = {
-            "src/test/resources/testData0.json",
-            "src/test/resources/testData1.json",
-            "src/test/resources/testData2.json",
-            "src/test/resources/image.png",
-            "src/test/resources/noFile.json"
+        "src/test/resources/testData0.json",
+        "src/test/resources/testData1.json",
+        "src/test/resources/testData2.json",
+        "src/test/resources/image.png",
+        "src/test/resources/noFile.json"
     };
 
     @Test
