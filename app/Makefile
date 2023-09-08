@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := install-run-dist
+.DEFAULT_GOAL := dist
 
 clean:
 	./gradlew clean
@@ -27,7 +27,5 @@ report:
 lint:
 	./gradlew checkstyleMain checkstyleTest
 
-
-install-run-dist: install run-dist
 
 .PHONY: build
