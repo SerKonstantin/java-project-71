@@ -16,8 +16,8 @@ public class Differ {
 
 
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> data1 = mapper.readValue(json1, Map.class);
-        Map<String, Object> data2 = mapper.readValue(json2, Map.class);
+        Map<String, ?> data1 = mapper.readValue(json1, Map.class);
+        Map<String, ?> data2 = mapper.readValue(json2, Map.class);
 
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
         combinedKeys.addAll(data2.keySet());
