@@ -53,7 +53,7 @@ class DifferTest {
 
     @Test
     public void generateNoFileTest() {
-        assertThrows(RuntimeException.class, () -> Differ.generate(filepaths[0], filepaths[4]));
+        assertThrows(RuntimeException.class, () -> Differ.generate(filepaths[0], "wrongPathToFile"));
     }
 
     @Test
