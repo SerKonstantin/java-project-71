@@ -1,18 +1,66 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Differ {
     public static String generate(String filepath1, String filepath2) throws Exception {
-        String json1 = fileToJson(filepath1);
-        String json2 = fileToJson(filepath2);
+        String json1 = fileToString(filepath1);
+        String json2 = fileToString(filepath2);
 
-        return "TODO-1";
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> data1 = mapper.readValue(json1, Map.class);
+        Map<String, Object> data2 = mapper.readValue(json2, Map.class);
+
+        SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
+        combinedKeys.addAll(data2.keySet());
+
+        StringBuilder sb = new StringBuilder("{\n");
+        for (var key: combinedKeys) {
+            if (!data1.containsKey(key)) {
+                sb.append("  + ")
+                        .append(key)
+                        .append(": ")
+                        .append(data2.get(key))
+                        .append("\n");
+            } else if (!data2.containsKey(key)) {
+                sb.append("  - ")
+                        .append(key)
+                        .append(": ")
+                        .append(data1.get(key))
+                        .append("\n");
+            } else if (data1.get(key).equals(data2.get(key))) {
+                sb.append("    ")
+                        .append(key)
+                        .append(": ")
+                        .append(data1.get(key))
+                        .append("\n");
+            } else {
+                sb.append("  - ")
+                        .append(key)
+                        .append(": ")
+                        .append(data1.get(key))
+                        .append("\n")
+                        .append("  + ")
+                        .append(key)
+                        .append(": ")
+                        .append(data2.get(key))
+                        .append("\n");
+            }
+        }
+        sb.append("}");
+
+        return sb.toString();
     }
 
-    public static String fileToJson(String filepath) throws Exception {
+    public static String fileToString(String filepath) throws Exception {
         Path path = Paths.get(filepath).toAbsolutePath().normalize();
         if (!Files.exists(path)) {
             throw new Exception("File '" + path + "' doesn't exist");
