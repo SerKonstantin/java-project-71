@@ -26,7 +26,6 @@ class DifferTest {
                   + timeout: 20
                   + verbose: true
                 }""";
-
         assertEquals(actual, expected);
     }
 
@@ -35,11 +34,12 @@ class DifferTest {
         String actual = Differ.generate(filepaths[0], filepaths[2]);
         String expected = """
                 {
-                  - "host": "hexlet.io",
-                  - "timeout": 50,
-                  - "proxy": "123.234.53.22",
-                  - "follow": false
+                  - follow: false
+                  - host: hexlet.io
+                  - proxy: 123.234.53.22
+                  - timeout: 50
                 }""";
+        assertEquals(actual, expected);
     }
 
     @Test
@@ -48,19 +48,16 @@ class DifferTest {
         String expected = """
                 {
                 }""";
+        assertEquals(actual, expected);
     }
 
     @Test
     public void generateNoFileTest() {
-        assertThrows(RuntimeException.class, () -> {
-            Differ.generate(filepaths[0], filepaths[4]);
-        });
+        assertThrows(RuntimeException.class, () -> Differ.generate(filepaths[0], filepaths[4]));
     }
 
     @Test
     public void generateInvalidFormatTest() {
-        assertThrows(RuntimeException.class, () -> {
-            Differ.generate(filepaths[0], filepaths[3]);
-        });
+        assertThrows(RuntimeException.class, () -> Differ.generate(filepaths[0], filepaths[3]));
     }
 }
