@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.file.Files;
@@ -16,8 +17,8 @@ public class Differ {
 
 
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, ?> data1 = mapper.readValue(json1, Map.class);
-        Map<String, ?> data2 = mapper.readValue(json2, Map.class);
+        Map<String, ?> data1 = mapper.readValue(json1, new TypeReference<>() {});
+        Map<String, ?> data2 = mapper.readValue(json2, new TypeReference<>() {});
 
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
         combinedKeys.addAll(data2.keySet());
