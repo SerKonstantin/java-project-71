@@ -26,8 +26,8 @@ jobs:
       - name: Generate jacoco report
         run: make report
 
-      - name: Publish Code Climate Test Coverage
-        uses: codeclimate/test-reporter-action@v3
-        with:
-          file: ./build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.TEST_REPORTER_ID }}
+      - name: Publish CodeClimate test coverage
+        uses: paambaati/codeclimate-action@v5.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.TEST_REPORTER_ID}}
+          JACOCO_SOURCE_PATH: "$app/src/main/java; make-C app report"
