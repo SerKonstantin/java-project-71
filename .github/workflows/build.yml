@@ -23,11 +23,11 @@ jobs:
           make test
           make lint
 
-      - name: Generate jacoco report
-        run: make report
-
-      - name: Publish CodeClimate test coverage
+      - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.TEST_REPORTER_ID}}
-          JACOCO_SOURCE_PATH: "app/build/reports/jacoco/test/html/index.html"
+          JACOCO_SOURCE_PATH: app/src/main/java
+        with:
+          coverageCommand: make report
+          coverageLocations: ${{github.workspace}}/app/build/reports/jacoco/test/html/index.html:jacoco
