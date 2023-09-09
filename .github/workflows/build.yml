@@ -30,4 +30,4 @@ jobs:
         uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.TEST_REPORTER_ID}}
-          JACOCO_SOURCE_PATH: "$app/src/main/java; make-C app report"
+          JACOCO_SOURCE_PATH: "app/build/reports/jacoco/test/html/index.html"
