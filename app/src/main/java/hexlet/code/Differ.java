@@ -2,6 +2,7 @@ package hexlet.code;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.apache.commons.io.FilenameUtils;
 
 import java.nio.file.Files;
@@ -24,15 +25,15 @@ public class Differ {
         String dataString1 = fileToString(filepath1);
         String dataString2 = fileToString(filepath2);
         switch (format1) {
-            case "json":
+            case "json" -> {
                 data1 = parseJson(dataString1);
                 data2 = parseJson(dataString2);
-                break;
-            case "yml":
+            }
+            case "yml" -> {
                 data1 = parseYml(dataString1);
                 data2 = parseYml(dataString2);
-            default:
-                throw new RuntimeException("Unsupported format");
+            }
+            default -> throw new RuntimeException("Unsupported format");
         }
 
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
@@ -89,17 +90,20 @@ public class Differ {
     }
 
     public static Map<String, ?> parseJson(String dataString) {
-        Map<String, ?> data;
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return data = mapper.readValue(dataString, new TypeReference<>() { });
+            return mapper.readValue(dataString, new TypeReference<>() { });
         } catch (Exception mappingError) {
-            throw new RuntimeException("Failed to read as json", mappingError);
+            throw new RuntimeException("Failed to read as .json", mappingError);
         }
     }
 
-    // TODO
     public static Map<String, ?> parseYml(String dataString) {
-        return null;
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        try {
+            return mapper.readValue(dataString, new TypeReference<>() { });
+        } catch (Exception mappingError) {
+            throw new RuntimeException("Failed to read as .yml", mappingError);
+        }
     }
 }
