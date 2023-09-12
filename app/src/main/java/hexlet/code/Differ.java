@@ -2,6 +2,7 @@ package hexlet.code;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FilenameUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,17 +13,26 @@ import java.util.TreeSet;
 
 public class Differ {
     public static String generate(String filepath1, String filepath2) {
-        String json1 = fileToString(filepath1);
-        String json2 = fileToString(filepath2);
+        String format1 = FilenameUtils.getExtension(filepath1);
+        String format2 = FilenameUtils.getExtension(filepath2);
+        if (!format1.equals(format2)) {
+            throw new RuntimeException("Files have different format");
+        }
 
         Map<String, ?> data1;
         Map<String, ?> data2;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            data1 = mapper.readValue(json1, new TypeReference<>() { });
-            data2 = mapper.readValue(json2, new TypeReference<>() { });
-        } catch (Exception mappingError) {
-            throw new RuntimeException("Failed to read as json", mappingError);
+        String dataString1 = fileToString(filepath1);
+        String dataString2 = fileToString(filepath2);
+        switch (format1) {
+            case "json":
+                data1 = parseJson(dataString1);
+                data2 = parseJson(dataString2);
+                break;
+            case "yml":
+                data1 = parseYml(dataString1);
+                data2 = parseYml(dataString2);
+            default:
+                throw new RuntimeException("Unsupported format");
         }
 
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
@@ -76,5 +86,20 @@ public class Differ {
         } catch (Exception readError) {
             throw new RuntimeException("Failed to read file '" + path + "'", readError);
         }
+    }
+
+    public static Map<String, ?> parseJson(String dataString) {
+        Map<String, ?> data;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return data = mapper.readValue(dataString, new TypeReference<>() { });
+        } catch (Exception mappingError) {
+            throw new RuntimeException("Failed to read as json", mappingError);
+        }
+    }
+
+    // TODO
+    public static Map<String, ?> parseYml(String dataString) {
+        return null;
     }
 }
