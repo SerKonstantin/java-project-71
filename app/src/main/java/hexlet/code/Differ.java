@@ -1,13 +1,7 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.apache.commons.io.FilenameUtils;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -22,16 +16,14 @@ public class Differ {
 
         Map<String, ?> data1;
         Map<String, ?> data2;
-        String dataString1 = fileToString(filepath1);
-        String dataString2 = fileToString(filepath2);
         switch (format1) {
             case "json" -> {
-                data1 = parseJson(dataString1);
-                data2 = parseJson(dataString2);
+                data1 = Parser.parseJson(filepath1);
+                data2 = Parser.parseJson(filepath2);
             }
             case "yml" -> {
-                data1 = parseYml(dataString1);
-                data2 = parseYml(dataString2);
+                data1 = Parser.parseYml(filepath1);
+                data2 = Parser.parseYml(filepath2);
             }
             default -> throw new RuntimeException("Unsupported format");
         }
@@ -75,35 +67,5 @@ public class Differ {
         sb.append("}");
 
         return sb.toString();
-    }
-
-    public static String fileToString(String filepath) {
-        Path path = Paths.get(filepath).toAbsolutePath().normalize();
-        if (!Files.exists(path)) {
-            throw new RuntimeException("File '" + path + "' doesn't exist");
-        }
-        try {
-            return Files.readString(path);
-        } catch (Exception readError) {
-            throw new RuntimeException("Failed to read file '" + path + "'", readError);
-        }
-    }
-
-    public static Map<String, ?> parseJson(String dataString) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(dataString, new TypeReference<>() { });
-        } catch (Exception mappingError) {
-            throw new RuntimeException("Failed to read as .json", mappingError);
-        }
-    }
-
-    public static Map<String, ?> parseYml(String dataString) {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            return mapper.readValue(dataString, new TypeReference<>() { });
-        } catch (Exception mappingError) {
-            throw new RuntimeException("Failed to read as .yml", mappingError);
-        }
     }
 }
