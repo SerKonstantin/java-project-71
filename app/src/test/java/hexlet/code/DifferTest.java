@@ -6,17 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DifferTest {
-    String[] filepaths = {
-        "src/test/resources/testData0.json",
-        "src/test/resources/testData1.json",
-        "src/test/resources/testData2.json",
-        "src/test/resources/image.png",
-        "src/test/resources/noFile.json"
-    };
-
     @Test
     public void generateTest() {
-        String actual = Differ.generate(filepaths[0], filepaths[1]);
+        String path1 = "src/test/resources/testData0.json";
+        String path2 = "src/test/resources/testData1.json";
+        String actual = Differ.generate(path1, path2);
         String expected = """
                 {
                   - follow: false
@@ -31,7 +25,9 @@ class DifferTest {
 
     @Test
     public void generatePartlyEmptyTest() {
-        String actual = Differ.generate(filepaths[0], filepaths[2]);
+        String path1 = "src/test/resources/testData0.json";
+        String path2 = "src/test/resources/testData2.json";
+        String actual = Differ.generate(path1, path2);
         String expected = """
                 {
                   - follow: false
@@ -44,7 +40,8 @@ class DifferTest {
 
     @Test
     public void generateFullyEmptyTest() {
-        String actual = Differ.generate(filepaths[2], filepaths[2]);
+        String path = "src/test/resources/testData2.json";
+        String actual = Differ.generate(path, path);
         String expected = """
                 {
                 }""";
@@ -53,11 +50,31 @@ class DifferTest {
 
     @Test
     public void generateNoFileTest() {
-        assertThrows(RuntimeException.class, () -> Differ.generate(filepaths[0], "wrongPathToFile"));
+        String path = "src/test/resources/testData0.json";
+        assertThrows(RuntimeException.class, () -> Differ.generate(path, "wrongPathToFile"));
     }
 
     @Test
     public void generateInvalidFormatTest() {
-        assertThrows(RuntimeException.class, () -> Differ.generate(filepaths[0], filepaths[3]));
+        String path1 = "src/test/resources/testData0.json";
+        String path2 = "src/test/resources/image.png";
+        assertThrows(RuntimeException.class, () -> Differ.generate(path1, path2));
+    }
+
+    @Test
+    public void generateTestWithYml() {
+        String path1 = "src/test/resources/testData0.yml";
+        String path2 = "src/test/resources/testData1.yml";
+        String actual = Differ.generate(path1, path2);
+        String expected = """
+                {
+                  - follow: false
+                    host: hexlet.io
+                  - proxy: 123.234.53.22
+                  - timeout: 50
+                  + timeout: 20
+                  + verbose: true
+                }""";
+        assertEquals(actual, expected);
     }
 }
