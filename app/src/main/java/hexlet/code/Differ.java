@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import static java.util.Objects.deepEquals;
+
 public class Differ {
     public static String generate(String filepath1, String filepath2) {
         String format1 = FilenameUtils.getExtension(filepath1);
@@ -27,7 +29,6 @@ public class Differ {
             }
             default -> throw new RuntimeException("Unsupported format");
         }
-
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
         combinedKeys.addAll(data2.keySet());
 
@@ -45,7 +46,7 @@ public class Differ {
                         .append(": ")
                         .append(data1.get(key))
                         .append("\n");
-            } else if (data1.get(key).equals(data2.get(key))) {
+            } else if (deepEquals(data1.get(key), (data2.get(key)))) {
                 sb.append("    ")
                         .append(key)
                         .append(": ")
