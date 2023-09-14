@@ -1,3 +1,17 @@
-timeout: 20
-verbose: true
-host: hexlet.io
+string1: "I won't change"
+string2: "I changed"
+completely new string value: "value2"
+bool1: true
+bool2: "Now I'm a string"
+numbers: [4, 8, 15, 16]
+chars1: ["a", "b", "c"]
+chars2: ["m", "m", "m"]
+int to null: null
+null to string: "Some string"
+null to null: null
+obj1:
+  nestedKey: "value"
+  isNested: true
+newObj:
+  nestedKey: "value"
+  isNested: true
