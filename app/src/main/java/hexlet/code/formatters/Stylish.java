@@ -3,9 +3,8 @@ package hexlet.code.formatters;
 import java.util.List;
 
 public class Stylish {
-    public static String generate(List<List<Object>> data) {
+    public static String generate(List<List<?>> data) {
         StringBuilder sb = new StringBuilder("{\n");
-
         for (var dataLine: data) {
             if (dataLine.get(0).equals("added")) {
                 sb.append("  + ")
