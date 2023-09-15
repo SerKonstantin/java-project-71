@@ -2,6 +2,8 @@ package hexlet.code;
 
 import org.apache.commons.io.FilenameUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -9,7 +11,7 @@ import java.util.TreeSet;
 import static java.util.Objects.deepEquals;
 
 public class Differ {
-    public static String generate(String filepath1, String filepath2) {
+    public static List<List<Object>> generate(String filepath1, String filepath2) {
         String format1 = FilenameUtils.getExtension(filepath1);
         String format2 = FilenameUtils.getExtension(filepath2);
         if (!format1.equals(format2)) {
@@ -29,44 +31,33 @@ public class Differ {
             }
             default -> throw new RuntimeException("Unsupported format");
         }
+
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
         combinedKeys.addAll(data2.keySet());
 
-        StringBuilder sb = new StringBuilder("{\n");
+        List<List<Object>> diffData = new ArrayList<>();
         for (var key: combinedKeys) {
             if (!data1.containsKey(key)) {
-                sb.append("  + ")
-                        .append(key)
-                        .append(": ")
-                        .append(data2.get(key))
-                        .append("\n");
+                diffData.add(createDiffLine("added", key, data1.get(key), data2.get(key)));
             } else if (!data2.containsKey(key)) {
-                sb.append("  - ")
-                        .append(key)
-                        .append(": ")
-                        .append(data1.get(key))
-                        .append("\n");
+                diffData.add(createDiffLine("removed", key,  data1.get(key), data2.get(key)));
             } else if (deepEquals(data1.get(key), (data2.get(key)))) {
-                sb.append("    ")
-                        .append(key)
-                        .append(": ")
-                        .append(data1.get(key))
-                        .append("\n");
+                diffData.add(createDiffLine("unchanged", key, data1.get(key), data2.get(key)));
             } else {
-                sb.append("  - ")
-                        .append(key)
-                        .append(": ")
-                        .append(data1.get(key))
-                        .append("\n")
-                        .append("  + ")
-                        .append(key)
-                        .append(": ")
-                        .append(data2.get(key))
-                        .append("\n");
+                diffData.add(createDiffLine("updated", key, data1.get(key), data2.get(key)));
             }
         }
-        sb.append("}");
 
-        return sb.toString();
+        return diffData;
+    }
+
+    // This method seem redundant, but it is necessary because the List.of() method does not allow null elements.
+    public static List<Object> createDiffLine(String status, String key, Object value1, Object value2) {
+        var diffLine = new ArrayList<>();
+        diffLine.add(status);
+        diffLine.add(key);
+        diffLine.add(value1);
+        diffLine.add(value2);
+        return diffLine;
     }
 }
