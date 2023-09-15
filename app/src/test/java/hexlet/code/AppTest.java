@@ -1,16 +1,29 @@
 package hexlet.code;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import picocli.CommandLine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class DifferTest {
+
+class AppTest {
+    private App app;
+    private CommandLine cmd;
+
+    @BeforeEach
+    public void setup() {
+        app = new App();
+        cmd = new CommandLine(app);
+    }
+
     @Test
-    public void generateTestJson() {
-        String path1 = "src/test/resources/testData0.json";
-        String path2 = "src/test/resources/testData1.json";
-        String actual = Differ.generate(path1, path2);
+    public void appTestJson() {
+        // Create an instance of the App class
+        String[] args = {"src/test/resources/testData0.json", "src/test/resources/testData1.json"};
+        cmd.execute(args);
+        String actual = app.call();
         String expected = """
                 {
                     bool1: true
@@ -38,9 +51,11 @@ class DifferTest {
     }
 
     @Test
-    public void generateFullyEmptyTestJson() {
+    public void appTestEmptyJson() {
         String path = "src/test/resources/testData2.json";
-        String actual = Differ.generate(path, path);
+        String[] args = {path, path};
+        cmd.execute(args);
+        String actual = app.call();
         String expected = """
                 {
                 }""";
@@ -48,17 +63,10 @@ class DifferTest {
     }
 
     @Test
-    public void generateInvalidFormatTestJson() {
-        String path1 = "src/test/resources/testData0.json";
-        String path2 = "src/test/resources/image.png";
-        assertThrows(RuntimeException.class, () -> Differ.generate(path1, path2));
-    }
-
-    @Test
-    public void generateTestYml() {
-        String path1 = "src/test/resources/testData0.yml";
-        String path2 = "src/test/resources/testData1.yml";
-        String actual = Differ.generate(path1, path2);
+    public void appTestYml() {
+        String[] args = {"src/test/resources/testData0.yml", "src/test/resources/testData1.yml"};
+        cmd.execute(args);
+        String actual = app.call();
         String expected = """
                 {
                     bool1: true
@@ -83,5 +91,26 @@ class DifferTest {
                   + string2: I changed
                 }""";
         assertEquals(actual, expected);
+    }
+
+    @Test
+    public void appTestInvalidFormat() {
+        String[] args = {"src/test/resources/testData0.json", "src/test/resources/image.png"};
+        cmd.execute(args);
+        assertThrows(RuntimeException.class, () -> app.call());
+    }
+
+    @Test
+    public void appTestInvalidPath() {
+        String[] args = {"src/test/resources/testData0.json", "wrongPathToFile"};
+        cmd.execute(args);
+        assertThrows(RuntimeException.class, () -> app.call());
+    }
+
+    @Test
+    public void appTestFakeFormat() {
+        String[] args = {"src/test/resources/testData0.json", "src/test/resources/fake.json"};
+        cmd.execute(args);
+        assertThrows(RuntimeException.class, () -> app.call());
     }
 }
