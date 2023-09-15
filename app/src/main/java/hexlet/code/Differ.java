@@ -18,17 +18,20 @@ public class Differ {
 
         List<List<?>> diffData = new ArrayList<>();
         for (var key: combinedKeys) {
+            String status;
             if (!data1.containsKey(key)) {
-                diffData.add(createDiffLine("added", key, data1.get(key), data2.get(key)));
+                status = "added";
             } else if (!data2.containsKey(key)) {
-                diffData.add(createDiffLine("removed", key,  data1.get(key), data2.get(key)));
+                status = "removed";
             } else if (deepEquals(data1.get(key), (data2.get(key)))) {
-                diffData.add(createDiffLine("unchanged", key, data1.get(key), data2.get(key)));
+                status = "unchanged";
             } else {
-                diffData.add(createDiffLine("updated", key, data1.get(key), data2.get(key)));
+                status = "updated";
             }
-        }
 
+            diffData.add(createDiffLine(status, key, data1.get(key), data2.get(key)));
+        }
+        // diffData may contain nulls
         return Formatter.generate(diffData, format);
     }
 

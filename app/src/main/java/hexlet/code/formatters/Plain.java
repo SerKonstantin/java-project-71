@@ -6,30 +6,19 @@ public class Plain {
     public static String generate(List<List<?>> data) {
         StringBuilder sb = new StringBuilder();
         for (var dataLine: data) {
+            var status = dataLine.get(0).toString();
+            var key = dataLine.get(1);
             var value1 = valueToPlainStyle(dataLine.get(2));
             var value2 = valueToPlainStyle(dataLine.get(3));
 
-            if (dataLine.get(0).equals("added")) {
-                sb.append("Property '")
-                        .append(dataLine.get(1))
-                        .append("' was added with value: ")
-                        .append(value2)
-                        .append("\n");
-            } else if (dataLine.get(0).equals("removed")) {
-                sb.append("Property '")
-                        .append(dataLine.get(1))
-                        .append("' was removed\n");
-            } else if (dataLine.get(0).equals("updated")) {
-                sb.append("Property '")
-                        .append(dataLine.get(1))
-                        .append("' was updated. From ")
-                        .append(value1)
-                        .append(" to ")
-                        .append(value2)
-                        .append("\n");
+            switch (status) {
+                case "added" -> sb.append(String.format("Property '%s' was added with value: %s\n", key, value2));
+                case "removed" -> sb.append(String.format("Property '%s' was removed\n", key));
+                case "updated" ->
+                        sb.append(String.format("Property '%s' was updated. From %s to %s\n", key, value1, value2));
+                default -> { }
             }
         }
-
         return sb.toString();
     }
 

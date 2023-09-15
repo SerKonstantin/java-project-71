@@ -6,39 +6,31 @@ public class Stylish {
     public static String generate(List<List<?>> data) {
         StringBuilder sb = new StringBuilder("{\n");
         for (var dataLine: data) {
-            if (dataLine.get(0).equals("added")) {
-                sb.append("  + ")
-                        .append(dataLine.get(1))
-                        .append(": ")
-                        .append(dataLine.get(3))
-                        .append("\n");
-            } else if (dataLine.get(0).equals("removed")) {
-                sb.append("  - ")
-                        .append(dataLine.get(1))
-                        .append(": ")
-                        .append(dataLine.get(2))
-                        .append("\n");
-            } else if (dataLine.get(0).equals("unchanged")) {
-                sb.append("    ")
-                        .append(dataLine.get(1))
-                        .append(": ")
-                        .append(dataLine.get(2))
-                        .append("\n");
-            } else {
-                sb.append("  - ")
-                        .append(dataLine.get(1))
-                        .append(": ")
-                        .append(dataLine.get(2))
-                        .append("\n")
-                        .append("  + ")
-                        .append(dataLine.get(1))
-                        .append(": ")
-                        .append(dataLine.get(3))
-                        .append("\n");
+            var status = dataLine.get(0).toString();
+            var key = dataLine.get(1);
+            var value1 = valueToString(dataLine.get(2));
+            var value2 = valueToString(dataLine.get(3));
+
+            switch (status) {
+                case "added" -> sb.append(String.format("  + %s: %s\n", key, value2));
+                case "removed" -> sb.append(String.format("  - %s: %s\n", key, value1));
+                case "unchanged" -> sb.append(String.format("    %s: %s\n", key, value1));
+                default -> {
+                    sb.append(String.format("  - %s: %s\n", key, value1));
+                    sb.append(String.format("  + %s: %s\n", key, value2));
+                }
             }
         }
         sb.append("}");
-
         return sb.toString();
+    }
+
+    // Need custom .toString to deal with nulls
+    public static String valueToString(Object value) {
+        if (value == null) {
+            return "null";
+        } else {
+            return value.toString();
+        }
     }
 }
