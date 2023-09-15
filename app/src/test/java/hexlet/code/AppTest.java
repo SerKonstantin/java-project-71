@@ -20,7 +20,6 @@ class AppTest {
 
     @Test
     public void appTestJson() {
-        // Create an instance of the App class
         String[] args = {"src/test/resources/testData0.json", "src/test/resources/testData1.json"};
         cmd.execute(args);
         String actual = app.call();
@@ -112,5 +111,23 @@ class AppTest {
         String[] args = {"src/test/resources/testData0.json", "src/test/resources/fake.json"};
         cmd.execute(args);
         assertThrows(RuntimeException.class, () -> app.call());
+    }
+
+    @Test
+    public void appTestJsonWithPlainOutput() {
+        String[] args = {"-f", "plain", "src/test/resources/testData0.json", "src/test/resources/testData1.json"};
+        cmd.execute(args);
+        String actual = app.call();
+        String expected = """
+                Property 'bool2' was updated. From false to 'Now I'm a string'
+                Property 'chars2' was updated. From [complex value] to [complex value]
+                Property 'completely new string value' was added with value: 'value2'
+                Property 'int to null' was updated. From 45 to null
+                Property 'newObj' was added with value: [complex value]
+                Property 'null to string' was updated. From null to 'Some string'
+                Property 'numbers' was updated. From [complex value] to [complex value]
+                Property 'string to get rid off' was removed
+                Property 'string2' was updated. From 'I'll change' to 'I changed'""";
+        assertEquals(actual, expected);
     }
 }
