@@ -127,7 +127,8 @@ class AppTest {
                 Property 'null to string' was updated. From null to 'Some string'
                 Property 'numbers' was updated. From [complex value] to [complex value]
                 Property 'string to get rid off' was removed
-                Property 'string2' was updated. From 'I'll change' to 'I changed'""";
+                Property 'string2' was updated. From 'I'll change' to 'I changed'
+                """;
         assertEquals(actual, expected);
     }
 }
