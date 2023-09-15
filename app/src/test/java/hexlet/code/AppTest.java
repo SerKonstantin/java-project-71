@@ -101,7 +101,7 @@ class AppTest {
 
     @Test
     public void appTestInvalidPath() {
-        String[] args = {"src/test/resources/testData0.json", "wrongPathToFile"};
+        String[] args = {"src/test/resources/testData0.json", "wrongPathToFile.json"};
         cmd.execute(args);
         assertThrows(RuntimeException.class, () -> app.call());
     }
