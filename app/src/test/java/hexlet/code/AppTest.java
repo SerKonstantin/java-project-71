@@ -131,4 +131,29 @@ class AppTest {
                 """;
         assertEquals(actual, expected);
     }
+
+    @Test
+    public void appTestYmlJsonWithJsonStringOutput() {
+        String[] args = {"-f", "json", "src/test/resources/testData0.yml", "src/test/resources/testData1.json"};
+        cmd.execute(args);
+        String actual = app.call();
+        String expected = "["
+                + "[\"unchanged\",\"bool1\",true,true],"
+                + "[\"updated\",\"bool2\",false,\"Now I'm a string\"],"
+                + "[\"unchanged\",\"chars1\",[\"a\",\"b\",\"c\"],[\"a\",\"b\",\"c\"]],"
+                + "[\"updated\",\"chars2\",[\"d\",\"e\",\"f\"],[\"m\",\"m\",\"m\"]],"
+                + "[\"added\",\"completely new string value\",null,\"value2\"],"
+                + "[\"updated\",\"int to null\",45,null],"
+                + "[\"added\",\"newObj\",null,{\"nestedKey\":\"value\",\"isNested\":true}],"
+                + "[\"unchanged\",\"null to null\",null,null],"
+                + "[\"updated\",\"null to string\",null,\"Some string\"],"
+                + "[\"updated\",\"numbers\",[5,6,7,8],[4,8,15,16]],"
+                + "[\"unchanged\",\"obj1\",{\"nestedKey\":\"value\",\"isNested\":true},"
+                                        + "{\"nestedKey\":\"value\",\"isNested\":true}],"
+                + "[\"removed\",\"string to get rid off\",\"value1\",null],"
+                + "[\"unchanged\",\"string1\",\"I won't change\",\"I won't change\"],"
+                + "[\"updated\",\"string2\",\"I'll change\",\"I changed\"]"
+                + "]";
+        assertEquals(actual, expected);
+    }
 }
