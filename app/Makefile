@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := dist
+.DEFAULT_GOAL := run
 
 clean:
 	./gradlew clean
@@ -13,10 +13,10 @@ dist:
 	./gradlew clean installDist
 
 run-dist:
-	./build/install/app/bin/app
+	./build/install/app/bin/app -h
 
 run:
-	./gradlew run
+	./gradlew run --args="-h"
 
 test:
 	./gradlew test
