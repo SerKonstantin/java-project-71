@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import static java.util.Objects.deepEquals;
 
 public class Differ {
-    public static String generate(String filepath1, String filepath2, String format) {
+    public static List<List<?>> generate(String filepath1, String filepath2) {
         Map<String, ?> data1 = Parser.mapOf(filepath1);
         Map<String, ?> data2 = Parser.mapOf(filepath2);
 
@@ -32,7 +32,7 @@ public class Differ {
             diffData.add(createDiffLine(status, key, data1.get(key), data2.get(key)));
         }
         // diffData may contain nulls
-        return Formatter.generate(diffData, format);
+        return diffData;
     }
 
     // This method seem redundant, but it is necessary because the List.of() method does not allow null elements.
