@@ -1,15 +1,16 @@
 package hexlet.code.formatters;
 
 import java.util.List;
+import java.util.Map;
 
 public class Stylish {
-    public static String generate(List<List<?>> data) {
+    public static String generate(List<Map<String, ?>> data) {
         StringBuilder sb = new StringBuilder("{\n");
         for (var dataLine: data) {
-            var status = dataLine.get(0).toString();
-            var key = dataLine.get(1);
-            var value1 = valueToString(dataLine.get(2));
-            var value2 = valueToString(dataLine.get(3));
+            var status = dataLine.get("status").toString();
+            var key = dataLine.get("key");
+            var value1 = dataLine.get("value1");
+            var value2 = dataLine.get("value2");
 
             switch (status) {
                 case "added" -> sb.append(String.format("  + %s: %s\n", key, value2));
@@ -23,14 +24,5 @@ public class Stylish {
         }
         sb.append("}");
         return sb.toString();
-    }
-
-    // Need custom .toString to deal with nulls
-    public static String valueToString(Object value) {
-        if (value == null) {
-            return "null";
-        } else {
-            return value.toString();
-        }
     }
 }

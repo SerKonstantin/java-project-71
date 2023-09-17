@@ -24,7 +24,7 @@ public class App implements Callable {
     private String format;
 
     @Override
-    public String call() {
+    public final String call() {
         var diff = Differ.generate(filepath1, filepath2, format);
         System.out.println(diff);
         return diff;

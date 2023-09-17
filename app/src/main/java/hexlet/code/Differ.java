@@ -1,6 +1,7 @@
 package hexlet.code;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -21,7 +22,7 @@ public class Differ {
         SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
         combinedKeys.addAll(data2.keySet());
 
-        List<List<?>> diffData = new ArrayList<>();
+        List<Map<String, ?>> diffData = new ArrayList<>();
         for (var key: combinedKeys) {
             String status;
             if (!data1.containsKey(key)) {
@@ -40,13 +41,12 @@ public class Differ {
         return Formatter.generate(diffData, format);
     }
 
-    // This method seem redundant, but it is necessary because the List.of() method does not allow null elements.
-    public static List<?> createDiffLine(String status, String key, Object value1, Object value2) {
-        var diffLine = new ArrayList<>();
-        diffLine.add(status);
-        diffLine.add(key);
-        diffLine.add(value1);
-        diffLine.add(value2);
+    public static Map<String, ?> createDiffLine(String status, String key, Object value1, Object value2) {
+        var diffLine = new HashMap<String, Object>();
+        diffLine.put("status", status);
+        diffLine.put("key", key);
+        diffLine.put("value1", value1);
+        diffLine.put("value2", value2);
         return diffLine;
     }
 }
