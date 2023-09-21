@@ -1,13 +1,12 @@
 package hexlet.code;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.apache.commons.io.FilenameUtils;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import static java.util.Objects.deepEquals;
 
 public class Differ {
     public static String generate(String filepath1, String filepath2) {
@@ -16,37 +15,28 @@ public class Differ {
     }
 
     public static String generate(String filepath1, String filepath2, String format) {
-        Map<String, ?> data1 = Parser.mapOf(filepath1);
-        Map<String, ?> data2 = Parser.mapOf(filepath2);
+        String dataString1 = readStringFromFile(filepath1);
+        String dataString2 = readStringFromFile(filepath2);
+        String extension1 = FilenameUtils.getExtension(filepath1);
+        String extension2 = FilenameUtils.getExtension(filepath2);
 
-        SortedSet<String> combinedKeys = new TreeSet<>(data1.keySet());
-        combinedKeys.addAll(data2.keySet());
+        Map<String, ?> data1 = Parser.mapOf(dataString1, extension1);
+        Map<String, ?> data2 = Parser.mapOf(dataString2, extension2);
 
-        List<Map<String, ?>> diffData = new ArrayList<>();
-        for (var key: combinedKeys) {
-            String status;
-            if (!data1.containsKey(key)) {
-                status = "added";
-            } else if (!data2.containsKey(key)) {
-                status = "removed";
-            } else if (deepEquals(data1.get(key), (data2.get(key)))) {
-                status = "unchanged";
-            } else {
-                status = "updated";
-            }
-
-            diffData.add(createDiffLine(status, key, data1.get(key), data2.get(key)));
-        }
+        List<Map<String, ?>> diffData = Comparator.compareMaps(data1, data2);
 
         return Formatter.generate(diffData, format);
     }
 
-    public static Map<String, ?> createDiffLine(String status, String key, Object value1, Object value2) {
-        var diffLine = new HashMap<String, Object>();
-        diffLine.put("status", status);
-        diffLine.put("key", key);
-        diffLine.put("value1", value1);
-        diffLine.put("value2", value2);
-        return diffLine;
+    public static String readStringFromFile(String filepath) {
+        Path path = Paths.get(filepath).toAbsolutePath().normalize();
+        if (!Files.exists(path)) {
+            throw new RuntimeException("File '" + path + "' doesn't exist");
+        }
+        try {
+            return Files.readString(path);
+        } catch (Exception readError) {
+            throw new RuntimeException("Failed to read file '" + path + "'", readError);
+        }
     }
 }
