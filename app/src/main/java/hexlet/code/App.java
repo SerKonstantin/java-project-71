@@ -10,7 +10,8 @@ import java.util.concurrent.Callable;
 public class App implements Callable {
     public static void main(String[] args) {
         App app = new App();
-        new CommandLine(app).execute(args);
+        int exitCode = new CommandLine(app).execute(args);
+        System.exit(exitCode);
     }
 
     @Parameters(index = "0", description = "path to first file", paramLabel = "filepath1")
@@ -24,9 +25,14 @@ public class App implements Callable {
     private String format;
 
     @Override
-    public final String call() {
-        var diff = Differ.generate(filepath1, filepath2, format);
-        System.out.println(diff);
-        return diff;
+    public final Integer call() {
+        try {
+            String diff = Differ.generate(filepath1, filepath2, format);
+            System.out.println(diff);
+            return 0;
+        } catch (Exception e) {
+            System.out.println("Something went wrong.");
+            return 1;
+        }
     }
 }
