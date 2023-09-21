@@ -88,21 +88,27 @@ class DifferTest {
     }
 
     @Test
-    public void differTestInvalidFormat() {
+    public void differTestCannotRead() {
         String path = "src/test/resources/hexlet/code/differ_inputs/image.png";
         assertThrows(RuntimeException.class, () -> Differ.generate(path, path));
     }
 
     @Test
-    public void appTestInvalidPath() {
+    public void differTestInvalidPath() {
         String path = "wrongPathToFile.json";
         assertThrows(RuntimeException.class, () -> Differ.generate(path, path));
     }
 
     @Test
-    public void appTestFakeFormat() {
+    public void differTestFakeFormat() {
         String path = "src/test/resources/hexlet/code/differ_inputs/fake.json";
         assertThrows(RuntimeException.class, () -> Differ.generate(path, path));
     }
 
+    @Test
+    public void differTestInvalidFormat() {
+        String path = "src/test/resources/hexlet/code/differ_inputs/testData1.json";
+        String format = "wrongFormat";
+        assertThrows(RuntimeException.class, () -> Differ.generate(path, path, format));
+    }
 }
