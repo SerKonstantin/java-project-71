@@ -31,7 +31,7 @@ public class App implements Callable {
             System.out.println(diff);
             return 0;
         } catch (Exception e) {
-            System.out.println("Something went wrong.");
+            System.out.println(e.getMessage());
             return 1;
         }
     }
