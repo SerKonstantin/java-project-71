@@ -18,7 +18,7 @@ class AppTest {
 
     @Test
     public void appTestSuccessStatus() {
-        String path = "src/test/resources/hexlet/code/differ_inputs/testData1.json";
+        String path = "src/test/resources/hexlet/code/differ_test_fixtures/testData1.json";
         String[] args = {path, path};
         int exitCode = cmd.execute(args);
         assertEquals(0, exitCode);
@@ -26,7 +26,7 @@ class AppTest {
 
     @Test
     public void appTestFailStatus() {
-        String path = "src/test/resources/hexlet/code/differ_inputs/image.png";
+        String path = "src/test/resources/hexlet/code/differ_test_fixtures/image.png";
         String[] args = {path, path};
         int exitCode = cmd.execute(args);
         assertEquals(1, exitCode);
