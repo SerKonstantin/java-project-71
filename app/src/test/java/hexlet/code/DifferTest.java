@@ -27,9 +27,9 @@ class DifferTest {
 
     @BeforeAll
     public static void readExpectedValues() throws Exception {
-        stylishExpected = Util.readStringByFilename(FOLDER_PATH, "stylish_expected");
-        plainExpected = Util.readStringByFilename(FOLDER_PATH, "plain_expected");
-        jsonExpected = Util.readStringByFilename(FOLDER_PATH, "json_expected");
+        stylishExpected = Util.readStringByFilepath(("stylish_expected"));
+        plainExpected = Util.readStringByFilepath(makeFilepath("plain_expected"));
+        jsonExpected = Util.readStringByFilepath(makeFilepath("json_expected"));
     }
 
     @ParameterizedTest

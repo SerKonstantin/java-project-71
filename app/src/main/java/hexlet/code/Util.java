@@ -5,11 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Util {
-    public static String readStringByFilename(String folderPath, String filename) throws Exception {
-        String filepath = folderPath + "/" + filename;
-        return readStringByFilepath(filepath);
-    }
-
     public static String readStringByFilepath(String filepath) throws Exception {
         Path path = Paths.get(filepath).toAbsolutePath().normalize();
         return Files.readString(path);
