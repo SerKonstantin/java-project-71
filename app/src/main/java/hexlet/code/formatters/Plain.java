@@ -26,25 +26,14 @@ public class Plain {
     }
 
     public static String valueToPlainStyle(Object value) {
-        if (isPrimitive(value)) {
-            return value.toString();
+        if (value instanceof List || value instanceof Map) {
+            return "[complex value]";
         } else if (value instanceof String) {
             return "'" + value + "'";
         } else if (value == null) {
             return "null";
         } else {
-            return "[complex value]";
+            return value.toString();
         }
-    }
-
-    public static boolean isPrimitive(Object value) {
-        return value instanceof Byte
-                || value instanceof Short
-                || value instanceof Integer
-                || value instanceof Long
-                || value instanceof Float
-                || value instanceof Double
-                || value instanceof Boolean
-                || value instanceof Character;
     }
 }
