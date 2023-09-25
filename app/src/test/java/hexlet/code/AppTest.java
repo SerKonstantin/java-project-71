@@ -7,12 +7,11 @@ import picocli.CommandLine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AppTest {
-    private App app;
     private CommandLine cmd;
 
     @BeforeEach
     public void setup() {
-        app = new App();
+        App app = new App();
         cmd = new CommandLine(app);
     }
 
