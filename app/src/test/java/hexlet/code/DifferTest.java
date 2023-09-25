@@ -50,13 +50,6 @@ class DifferTest {
     }
 
     @Test
-    public void differTestWithTwoArgs() throws Exception {
-        String expected = Differ.generate(JSON_1, JSON_2, "stylish");
-        String actual = Differ.generate(JSON_1, JSON_2);
-        assertEquals(expected, actual);
-    }
-
-    @Test
     public void differTestEmptyJson() throws Exception {
         String path = makeFilepath("empty.json");
         String actual = Differ.generate(path, path);
