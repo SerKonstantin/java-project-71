@@ -1,18 +1,14 @@
 package hexlet.code.formatters;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
 
 public class Json {
-    public static String generateJsonString(List<Map<String, ?>> data) {
+    public static String generateJsonString(List<Map<String, ?>> data) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            return objectMapper.writeValueAsString(data);
-        } catch (Exception writingError) {
-            throw new RuntimeException("Failed to form a String", writingError);
-        }
+        return objectMapper.writeValueAsString(data);
     }
 }

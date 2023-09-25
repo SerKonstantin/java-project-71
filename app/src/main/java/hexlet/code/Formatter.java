@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Formatter {
-    public static String generate(List<Map<String, ?>> data, String format) {
+    public static String generate(List<Map<String, ?>> data, String format) throws Exception {
         return switch (format) {
             case "stylish" -> Stylish.generate(data);
             case "plain" -> Plain.generate(data);

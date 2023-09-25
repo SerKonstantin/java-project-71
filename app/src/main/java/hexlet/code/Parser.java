@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.util.Map;
 
 public class Parser {
-    public static Map<String, ?> mapOf(String dataString, String format) {
+    public static Map<String, ?> mapOf(String dataString, String format) throws JsonProcessingException {
         switch (format) {
             case "json" -> {
                 return parseJson(dataString);
@@ -19,21 +20,13 @@ public class Parser {
         }
     }
 
-    public static Map<String, ?> parseJson(String dataString) {
+    public static Map<String, ?> parseJson(String dataString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(dataString, new TypeReference<>() { });
-        } catch (Exception mappingError) {
-            throw new RuntimeException("Failed to read as .json", mappingError);
-        }
+        return mapper.readValue(dataString, new TypeReference<>() { });
     }
 
-    public static Map<String, ?> parseYaml(String dataString) {
+    public static Map<String, ?> parseYaml(String dataString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            return mapper.readValue(dataString, new TypeReference<>() { });
-        } catch (Exception mappingError) {
-            throw new RuntimeException("Failed to read as .yml", mappingError);
-        }
+        return mapper.readValue(dataString, new TypeReference<>() { });
     }
 }
