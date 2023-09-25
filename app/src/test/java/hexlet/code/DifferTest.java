@@ -16,10 +16,10 @@ class DifferTest {
     private static String stylishExpected;
     private static String plainExpected;
     private static String jsonExpected;
-    private static String json1 = makeFilepath("testData1.json");
-    private static String json2 = makeFilepath("testData2.json");
-    private static String yaml1 = makeFilepath("testData1.yml");
-    private static String yaml2 = makeFilepath("testData2.yaml");
+    private static final String JSON_1 = makeFilepath("testData1.json");
+    private static final String JSON_2 = makeFilepath("testData2.json");
+    private static final String YAML_1 = makeFilepath("testData1.yml");
+    private static final String YAML_2 = makeFilepath("testData2.yaml");
 
     public static String makeFilepath(String filename) {
         return FOLDER_PATH + "/" + filename;
@@ -34,29 +34,25 @@ class DifferTest {
 
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    public void differTest(String path1, String path2, String format, String expected) throws Exception {
-        String actual = Differ.generate(path1, path2, format);
-        assertEquals(expected, actual);
+    public void differTest(String path1, String path2) throws Exception {
+        assertEquals(stylishExpected, Differ.generate(path1, path2));
+        assertEquals(stylishExpected, Differ.generate(path1, path2, "stylish"));
+        assertEquals(plainExpected, Differ.generate(path1, path2, "plain"));
+        assertEquals(jsonExpected, Differ.generate(path1, path2, "json"));
     }
 
     static Stream<Arguments> provideTestCases() {
         return Stream.of(
-                Arguments.of(json1, json2, "stylish", stylishExpected),
-                Arguments.of(yaml1, yaml2, "stylish", stylishExpected),
-                Arguments.of(json1, yaml2, "stylish", stylishExpected),
-                Arguments.of(json1, json2, "plain", plainExpected),
-                Arguments.of(yaml1, yaml2, "plain", plainExpected),
-                Arguments.of(json1, yaml2, "plain", plainExpected),
-                Arguments.of(json1, json2, "json", jsonExpected),
-                Arguments.of(yaml1, yaml2, "json", jsonExpected),
-                Arguments.of(json1, yaml2, "json", jsonExpected)
+                Arguments.of(JSON_1, JSON_2),
+                Arguments.of(YAML_1, YAML_2),
+                Arguments.of(JSON_1, YAML_2)
         );
     }
 
     @Test
     public void differTestWithTwoArgs() throws Exception {
-        String expected = Differ.generate(json1, json2, "stylish");
-        String actual = Differ.generate(json1, json2);
+        String expected = Differ.generate(JSON_1, JSON_2, "stylish");
+        String actual = Differ.generate(JSON_1, JSON_2);
         assertEquals(expected, actual);
     }
 
@@ -91,6 +87,6 @@ class DifferTest {
     @Test
     public void differTestInvalidFormat() {
         String format = "wrongFormat";
-        assertThrows(Exception.class, () -> Differ.generate(json1, json2, format));
+        assertThrows(Exception.class, () -> Differ.generate(JSON_1, JSON_2, format));
     }
 }
