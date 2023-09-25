@@ -27,7 +27,7 @@ class DifferTest {
 
     @BeforeAll
     public static void readExpectedValues() throws Exception {
-        stylishExpected = Util.readStringByFilepath(("stylish_expected"));
+        stylishExpected = Util.readStringByFilepath(makeFilepath("stylish_expected"));
         plainExpected = Util.readStringByFilepath(makeFilepath("plain_expected"));
         jsonExpected = Util.readStringByFilepath(makeFilepath("json_expected"));
     }
