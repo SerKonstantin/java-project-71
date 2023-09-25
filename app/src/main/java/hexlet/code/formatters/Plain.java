@@ -10,11 +10,12 @@ public class Plain {
                 .map(dataLine -> {
                     var status = dataLine.get("status").toString();
                     var key = dataLine.get("key");
+                    var value = valueToPlainStyle(dataLine.get("value"));
                     var value1 = valueToPlainStyle(dataLine.get("value1"));
                     var value2 = valueToPlainStyle(dataLine.get("value2"));
 
                     return switch (status) {
-                        case "added" -> String.format("Property '%s' was added with value: %s", key, value2);
+                        case "added" -> String.format("Property '%s' was added with value: %s", key, value);
                         case "removed" -> String.format("Property '%s' was removed", key);
                         case "updated" ->
                                 String.format("Property '%s' was updated. From %s to %s", key, value1, value2);

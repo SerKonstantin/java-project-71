@@ -22,13 +22,13 @@ public class Comparator {
             diffLine.put("key", key);
             if (!data1.containsKey(key)) {
                 diffLine.put("status", "added");
-                diffLine.put("value2", data2.get(key));
+                diffLine.put("value", data2.get(key));
             } else if (!data2.containsKey(key)) {
                 diffLine.put("status", "removed");
-                diffLine.put("value1", data1.get(key));
+                diffLine.put("value", data1.get(key));
             } else if (deepEquals(data1.get(key), (data2.get(key)))) {
                 diffLine.put("status", "unchanged");
-                diffLine.put("value1", data1.get(key));
+                diffLine.put("value", data1.get(key));
             } else {
                 diffLine.put("status", "updated");
                 diffLine.put("value1", data1.get(key));
